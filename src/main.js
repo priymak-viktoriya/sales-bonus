@@ -42,7 +42,7 @@ function calculateBonusByProfit(index, total, seller) {
     const bonus = profit * bonusPercent / 100;
 
     // Округляем до целого числа (можно оставить и дробным, но в ТЗ пример целый)
-    return Math.round(bonus);
+    return bonus;
 }
 
 /**
@@ -57,10 +57,14 @@ function analyzeSalesData(data, options) {
         throw new Error('Invalid data: data must be an object');
     }
 
-    if (!data.sellers || !Array.isArray(data.sellers) ||
-        !data.products || !Array.isArray(data.products) ||
-        !data.purchase_records || !Array.isArray(data.purchase_records)) {
-        throw new Error('Invalid data structure: missing required collections');
+    if (!data.sellers || !Array.isArray(data.sellers) || data.sellers.length === 0) {
+        throw new Error('Invalid data structure: missing or empty sellers');
+    }
+    if (!data.products || !Array.isArray(data.products) || data.products.length === 0) {
+        throw new Error('Invalid data structure: missing or empty products');
+    }
+    if (!data.purchase_records || !Array.isArray(data.purchase_records) || data.purchase_records.length === 0) {
+        throw new Error('Invalid data structure: missing or empty purchase_records');
     }
 
 
@@ -99,11 +103,9 @@ function analyzeSalesData(data, options) {
     // @TODO: Расчет выручки и прибыли для каждого продавца
     for (const record of data.purchase_records) {
         const sellerId = record.seller_id;
-
         const stats = sellerStats.get(sellerId);
         if (!stats) {
-            console.warn(`Seller with id ${sellerId} not found`);
-            continue;
+            throw new Error(`Seller with id ${sellerId} not found in sellers data`);
         }
 
         stats.sales_count++;
@@ -111,8 +113,7 @@ function analyzeSalesData(data, options) {
         for (const item of record.items) {
             const product = productIndex[item.sku];
             if (!product) {
-                console.warn(`Product with sku ${item.sku} not found`);
-                continue;
+                throw new Error(`Product with sku ${item.sku} not found in products data`);
             }
 
             // Выручка через переданную функцию
@@ -160,16 +161,11 @@ function analyzeSalesData(data, options) {
         return {
             seller_id: seller.sellerId,
             name: `${sellerInfo.first_name} ${sellerInfo.last_name}`,
-            revenue: +stats.revenue.toFixed(2),      // число с двумя знаками
-            profit: +stats.profit.toFixed(2),        // число с двумя знаками
+            revenue: Math.round(stats.revenue * 100) / 100,
+            profit: Math.round(stats.profit * 100) / 100,
             sales_count: stats.sales_count,
             top_products: topProducts,
-            bonus: +seller.bonus.toFixed(2)          // число с двумя знаками
+            bonus: Math.round(seller.bonus * 100) / 100
         };
     });
 }
-
-
-
-
-

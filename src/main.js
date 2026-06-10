@@ -1,9 +1,4 @@
-/**
- * Функция для расчета выручки
- * @param purchase запись о покупке
- * @param _product карточка товара
- * @returns {number}
- */
+
 function calculateSimpleRevenue(purchase, _product) {
     // @TODO: Расчет выручки от операции
     const { sale_price, quantity, discount } = purchase;
@@ -12,13 +7,6 @@ function calculateSimpleRevenue(purchase, _product) {
     return revenue;
 }
 
-/**
- * Функция для расчета бонусов
- * @param index порядковый номер в отсортированном массиве
- * @param total общее число продавцов
- * @param seller карточка продавца
- * @returns {number}
- */
 function calculateBonusByProfit(index, total, seller) {
     // @TODO: Расчет бонуса от позиции в рейтинге
     const { profit } = seller;
@@ -40,19 +28,11 @@ function calculateBonusByProfit(index, total, seller) {
 
     // Бонус = прибыль * процент / 100
     const bonus = profit * bonusPercent / 100;
-
-    // Округляем до целого числа (можно оставить и дробным, но в ТЗ пример целый)
     return bonus;
 }
 
-/**
- * Функция для анализа данных продаж
- * @param data
- * @param options
- * @returns {{revenue, top_products, bonus, name, sales_count, profit, seller_id}[]}
- */
 function analyzeSalesData(data, options) {
-    // @TODO: Проверка входных данных
+
     if (!data || typeof data !== 'object') {
         throw new Error('Invalid data: data must be an object');
     }

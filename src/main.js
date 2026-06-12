@@ -1,4 +1,9 @@
-
+/**
+ * Функция для расчета выручки
+ * @param purchase запись о покупке
+ * @param _product карточка товара
+ * @returns {number}
+ */
 function calculateSimpleRevenue(purchase, _product) {
     // @TODO: Расчет выручки от операции
     const { sale_price, quantity, discount } = purchase;
@@ -6,7 +11,13 @@ function calculateSimpleRevenue(purchase, _product) {
     const revenue = sale_price * quantity * (1 - discountDecimal);
     return revenue;
 }
-
+/**
+ * Функция для расчета бонусов
+ * @param index порядковый номер в отсортированном массиве
+ * @param total общее число продавцов
+ * @param seller карточка продавца
+ * @returns {number}
+ */
 function calculateBonusByProfit(index, total, seller) {
     // @TODO: Расчет бонуса от позиции в рейтинге
     const { profit } = seller;
@@ -30,6 +41,13 @@ function calculateBonusByProfit(index, total, seller) {
     const bonus = profit * bonusPercent / 100;
     return bonus;
 }
+
+/**
+ * Функция для анализа данных продаж
+ * @param data
+ * @param options
+ * @returns {{revenue, top_products, bonus, name, sales_count, profit, seller_id}[]}
+ */
 
 function analyzeSalesData(data, options) {
 
@@ -141,11 +159,11 @@ function analyzeSalesData(data, options) {
         return {
             seller_id: seller.sellerId,
             name: `${sellerInfo.first_name} ${sellerInfo.last_name}`,
-            revenue: +seller.revenue.toFixed(2),
-        profit: +seller.profit.toFixed(2),
-        sales_count: seller.sales_count, 
-        top_products: seller.top_products, 
-        bonus: +seller.bonus.toFixed(2) 
+            revenue: Math.round(stats.revenue * 100) / 100,
+            profit: Math.round(stats.profit * 100) / 100,
+            sales_count: stats.sales_count,
+            top_products: topProducts,
+            bonus: Math.round(seller.bonus * 100) / 100
         };
     });
 }

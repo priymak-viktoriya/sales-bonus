@@ -98,7 +98,7 @@ function analyzeSalesData(data, options) {
 
             // Выручка через переданную функцию
             const revenue = calculateRevenue(item, product);
-            stats.revenue += revenue;
+            stats.revenue += revenue.toFixed(2);
 
             // Закупочная стоимость
             const purchaseCost = product.purchase_price * item.quantity;
@@ -141,11 +141,11 @@ function analyzeSalesData(data, options) {
         return {
             seller_id: seller.sellerId,
             name: `${sellerInfo.first_name} ${sellerInfo.last_name}`,
-            revenue: Math.round(stats.revenue * 100) / 100,
-            profit: Math.round(stats.profit * 100) / 100,
-            sales_count: stats.sales_count,
-            top_products: topProducts,
-            bonus: Math.round(seller.bonus * 100) / 100
+            revenue: +seller.revenue.toFixed(2),
+        profit: +seller.profit.toFixed(2),
+        sales_count: seller.sales_count, 
+        top_products: seller.top_products, 
+        bonus: +seller.bonus.toFixed(2) 
         };
     });
 }

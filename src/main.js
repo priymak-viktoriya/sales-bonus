@@ -4,6 +4,7 @@
  * @param _product карточка товара
  * @returns {number}
  */
+
 function calculateSimpleRevenue(purchase, _product) {
     // @TODO: Расчет выручки от операции
     const { sale_price, quantity, discount } = purchase;
@@ -11,6 +12,7 @@ function calculateSimpleRevenue(purchase, _product) {
     const revenue = sale_price * quantity * (1 - discountDecimal);
     return revenue;
 }
+
 /**
  * Функция для расчета бонусов
  * @param index порядковый номер в отсортированном массиве
@@ -24,21 +26,17 @@ function calculateBonusByProfit(index, total, seller) {
     let bonusPercent;
 
     if (index === 0) {
-        // Первое место — 15%
         bonusPercent = 15;
     } else if (index === 1 || index === 2) {
-        // Второе и третье место — 10%
         bonusPercent = 10;
     } else if (index === total - 1) {
-        // Последнее место — 0%
         bonusPercent = 0;
     } else {
-        // Все остальные — 5%
         bonusPercent = 5;
     }
 
-    // Бонус = прибыль * процент / 100
     const bonus = profit * bonusPercent / 100;
+
     return bonus;
 }
 
@@ -48,8 +46,8 @@ function calculateBonusByProfit(index, total, seller) {
  * @param options
  * @returns {{revenue, top_products, bonus, name, sales_count, profit, seller_id}[]}
  */
-
 function analyzeSalesData(data, options) {
+    // @TODO: Проверка входных данных
 
     if (!data || typeof data !== 'object') {
         throw new Error('Invalid data: data must be an object');
@@ -116,11 +114,12 @@ function analyzeSalesData(data, options) {
 
             // Выручка через переданную функцию
             const revenue = calculateRevenue(item, product);
-            stats.revenue += revenue.toFixed(2);
+
+            stats.revenue += +revenue.toFixed(2);
 
             // Закупочная стоимость
             const purchaseCost = product.purchase_price * item.quantity;
-            stats.profit += revenue - purchaseCost;
+            stats.profit += +revenue - purchaseCost;
 
             // Учет количества проданных товаров для топ-10
             const currentQuantity = stats.productsSales.get(item.sku) || 0;
